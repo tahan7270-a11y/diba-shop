@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} | مزون دیبا{% endblock %}
+
+{% block content %}
+
+<section class="product-detail-section">
+    <div class="container">
+        
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">خانه</a>
+            <span>/</span>
+            <a href="{% url 'product_list' %}">محصولات</a>
+            <span>/</span>
+            <a href="{% url 'category_products' product.category.slug %}">{{ product.category.name }}</a>
+            <span>/</span>
+            <span>{{ product.name }}</span>
+        </div>
+        
+        <div class="product-detail-layout">
+            
+            <!-- گالری عکس -->
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" id="mainImage">
+                </div>
+                <div class="thumbnail-images">
+                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" onclick="changeImage(this)">
+                    {% for img in product.images.all %}
+                    <img src="{{ img.image.url }}" alt="{{ product.name }}" onclick="changeImage(this)">
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- اطلاعات محصول -->
+            <div class="product-details">
+                <h1>{{ product.name }}</h1>
+                
+                <div class="product-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <span>(۰ نظر)</span>
+                </div>
+                
+                <div class="product-price-detail">
+                    {% if product.discount_price %}
+                    <span class="old-price">{{ product.price }} تومان</span>
+                    <span class="new-price">{{ product.discount_price }} تومان</span>
+                    <span class="discount-percent">
+                        {{ product.discount_percent }}٪ تخفیف
+                    </span>
+                    {% else %}
+                    <span class="new-price">{{ product.price }} تومان</span>
+                    {% endif %}
+                </div>
+                
+                <div class="product-description">
+                    <h3>توضیحات</h3>
+                    <p>{{ product.description }}</p>
+                </div>
+                
+                <div class="product-options">
+                    <div class="option-group">
+                        <label>سایز:</label>
+                        <div class="size-buttons">
+                            <button>S</button>
+                            <button>M</button>
+                            <button>L</button>
+                            <button>XL</button>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label>رنگ:</label>
+                        <div class="color-buttons">
+                            <button style="background: #000;"></button>
+                            <button style="background: #B76E79;"></button>
+                            <button style="background: #D4AF37;"></button>
+                            <button style="background: #fff;"></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-actions">
+                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-gold btn-large">
+                        <i class="fas fa-shopping-bag"></i> افزودن به سبد خرید
+                    </a>
+                    <button class="btn-wishlist">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                
+                <div class="product-features">
+                    <div class="feature-item">
+                        <i class="fas fa-truck"></i>
+                        <span>ارسال سریع</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>تضمین کیفیت</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-undo"></i>
+                        <span>بازگشت ۷ روزه</span>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<script>
+function changeImage(element) {
+    document.getElementById('mainImage').src = element.src;
+}
+</script>
+
+{% endblock %}

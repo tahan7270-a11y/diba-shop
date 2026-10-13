@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}سفارش موفق | مزون دیبا{% endblock %}
+
+{% block content %}
+
+<section class="success-section">
+    <div class="container">
+        <div class="success-box">
+            <i class="fas fa-check-circle"></i>
+            <h1>سفارش شما با موفقیت ثبت شد!</h1>
+            <p>شماره سفارش شما: <strong>{{ order.order_number }}</strong></p>
+            <p>مبلغ کل: <strong>{{ order.total_price }} تومان</strong></p>
+            <p>به‌زودی با شما تماس گرفته می‌شود.</p>
+            <div class="success-actions">
+                <a href="{% url 'my_orders' %}" class="btn btn-gold">مشاهده سفارش‌ها</a>
+                <a href="{% url 'home' %}" class="btn btn-outline-gold">بازگشت به خانه</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

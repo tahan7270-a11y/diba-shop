@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ورود | مزون دیبا{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-box">
+            <h1>ورود به حساب کاربری</h1>
+            <p>خوش آمدید! لطفاً وارد شوید.</p>
+            
+            <form method="POST" class="auth-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label>نام کاربری:</label>
+                    <input type="text" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>رمز عبور:</label>
+                    <input type="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-gold btn-large">ورود</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>حساب کاربری ندارید؟ <a href="{% url 'register' %}">ثبت‌نام کنید</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

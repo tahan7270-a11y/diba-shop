@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}سفارش‌های من | مزون دیبا{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>سفارش‌های من</h1>
+    </div>
+</section>
+
+<section class="orders-section">
+    <div class="container">
+        {% if orders %}
+        <div class="orders-list">
+            {% for order in orders %}
+            <div class="order-card">
+                <div class="order-header">
+                    <div>
+                        <h3>سفارش {{ order.order_number }}</h3>
+                        <p>{{ order.created_at|date:"Y/m/d - H:i" }}</p>
+                    </div>
+                    <span class="order-status status-{{ order.status }}">
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+                <div class="order-body">
+                    <p>مبلغ کل: <strong>{{ order.total_price }} تومان</strong></p>
+                    <p>تعداد آیتم: {{ order.items.count }}</p>
+                    
+                    <div class="order-items">
+                        {% for item in order.items.all %}
+                        <div class="order-item-small">
+                            <span>{{ item.product.name }} × {{ item.quantity }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-orders">
+            <i class="fas fa-box-open"></i>
+            <h2>هنوز سفارشی ثبت نکرده‌اید</h2>
+            <a href="{% url 'product_list' %}" class="btn btn-gold">مشاهده محصولات</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

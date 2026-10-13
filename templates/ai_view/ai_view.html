@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}اتاق پرو هوشمند | مزون دیبا{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>اتاق پرو هوشمند</h1>
+        <p>لباس رو روی خودت ببین، قبل از خرید!</p>
+    </div>
+</section>
+
+<section class="ai-section">
+    <div class="container">
+        <div class="ai-box">
+            <h2>عکس خودت رو آپلود کن</h2>
+            
+            <form method="POST" enctype="multipart/form-data" class="ai-form">
+                {% csrf_token %}
+                
+                <div class="upload-box">
+                    <i class="fas fa-user"></i>
+                    <p>عکس خودت رو آپلود کن</p>
+                    <input type="file" name="user_image" accept="image/*" required>
+                </div>
+                
+                <div class="upload-box">
+                    <i class="fas fa-tshirt"></i>
+                    <p>عکس لباس رو آپلود کن</p>
+                    <input type="file" name="product_image" accept="image/*" required>
+                </div>
+                
+                <button type="submit" class="btn btn-gold btn-large">
+                    <i class="fas fa-magic"></i> بساز!
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

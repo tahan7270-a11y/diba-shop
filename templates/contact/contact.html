@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}تماس با ما | مزون دیبا{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>تماس با ما</h1>
+    </div>
+</section>
+
+<section class="contact-section">
+    <div class="container">
+        <div class="contact-layout">
+            
+            <div class="contact-info">
+                <h2>راه‌های ارتباطی</h2>
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h4>آدرس</h4>
+                        <p>تبریز، خیابان ولیعصر</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <h4>تلفن</h4>
+                        <p>۰۹۱۲۳۴۵۶۷۸۹</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h4>ایمیل</h4>
+                        <p>info@diba.com</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form-box">
+                <h2>پیام بفرستید</h2>
+                <form method="POST" class="contact-form">
+                    {% csrf_token %}
+                    <input type="text" name="name" placeholder="نام شما" required>
+                    <input type="email" name="email" placeholder="ایمیل" required>
+                    <input type="tel" name="phone" placeholder="شماره تماس">
+                    <input type="text" name="subject" placeholder="موضوع" required>
+                    <textarea name="message" rows="5" placeholder="پیام شما" required></textarea>
+                    <button type="submit" class="btn btn-gold btn-large">ارسال پیام</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+{% endblock %}

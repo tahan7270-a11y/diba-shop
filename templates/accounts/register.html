@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ثبت‌نام | مزون دیبا{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-box">
+            <h1>ثبت‌نام</h1>
+            <p>به مزون دیبا خوش آمدید!</p>
+            
+            <form method="POST" class="auth-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label>نام کاربری:</label>
+                    <input type="text" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>ایمیل:</label>
+                    <input type="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>شماره تماس:</label>
+                    <input type="tel" name="phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>رمز عبور:</label>
+                    <input type="password" name="password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>تکرار رمز عبور:</label>
+                    <input type="password" name="password2" required>
+                </div>
+                
+                <button type="submit" class="btn btn-gold btn-large">ثبت‌نام</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>حساب کاربری دارید؟ <a href="{% url 'login' %}">وارد شوید</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

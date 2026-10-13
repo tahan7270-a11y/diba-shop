@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}مزون دیبا{% endblock %}</title>
+    
+    <!-- فونت وزیرمتن -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS اصلی -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ===== هدر ===== -->
+<header class="header">
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-content">
+                <span><i class="fas fa-truck"></i> ارسال سریع به سراسر کشور</span>
+                <span><i class="fas fa-shield-alt"></i> تضمین کیفیت</span>
+                <span><i class="fas fa-phone"></i> ۰۹۱۲۳۴۵۶۷۸۹</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-header">
+        <div class="container">
+            <div class="header-content">
+                
+                <!-- لوگو -->
+                <a href="{% url 'home' %}" class="logo">
+                    <img src="{% static 'images/logo.png' %}" alt="مزون دیبا">
+                </a>
+                
+                <!-- منوی اصلی -->
+                <nav class="main-menu">
+                    <ul>
+                        <li><a href="{% url 'home' %}">خانه</a></li>
+                        <li class="has-mega">
+                            <a href="{% url 'product_list' %}">محصولات <i class="fas fa-chevron-down"></i></a>
+                            <div class="mega-menu">
+                                <div class="mega-column">
+                                    <h4>پیراهن</h4>
+                                    <a href="#">پیراهن مجلسی</a>
+                                    <a href="#">پیراهن اسپرت</a>
+                                    <a href="#">پیراهن رسمی</a>
+                                </div>
+                                <div class="mega-column">
+                                    <h4>شلوار و دامن</h4>
+                                    <a href="#">شلوار پارچه‌ای</a>
+                                    <a href="#">دامن بلند</a>
+                                    <a href="#">دامن کوتاه</a>
+                                </div>
+                                <div class="mega-column">
+                                    <h4>پالتو و بارانی</h4>
+                                    <a href="#">پالتو بلند</a>
+                                    <a href="#">بارانی</a>
+                                    <a href="#">کاپشن</a>
+                                </div>
+                                <div class="mega-column">
+                                    <h4>اکسسوری</h4>
+                                    <a href="#">شال و روسری</a>
+                                    <a href="#">کیف</a>
+                                    <a href="#">جواهرات</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li><a href="{% url 'ai_view' %}">اتاق پرو هوشمند</a></li>
+                        <li><a href="{% url 'about' %}">درباره ما</a></li>
+                        <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- آیکون‌های سمت چپ -->
+                <div class="header-actions">
+                    
+                    <!-- فرم جستجو -->
+                    <form method="GET" action="{% url 'search' %}" class="search-form">
+                        <input type="text" name="q" placeholder="جستجو..." 
+                               value="{{ request.GET.q|default:'' }}">
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    
+                    {% if user.is_authenticated %}
+                        <div class="user-menu">
+                            <a href="{% url 'profile' %}" title="پروفایل">
+                                <i class="fas fa-user"></i>
+                                {{ user.username }}
+                            </a>
+                            <a href="{% url 'my_orders' %}" title="سفارش‌های من">
+                                <i class="fas fa-box"></i>
+                            </a>
+                            
+                            {% if user.is_staff %}
+                            <a href="{% url 'dashboard' %}" title="داشبورد">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </a>
+                            {% endif %}
+                            
+                            <a href="{% url 'logout' %}" class="logout-btn" title="خروج">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </a>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="icon-btn" title="ورود">
+                            <i class="fas fa-user"></i>
+                        </a>
+                    {% endif %}
+                    
+                    <a href="{% url 'cart_view' %}" class="cart-btn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="cart-count">{{ cart_count }}</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ===== محتوای اصلی ===== -->
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<!-- ===== فوتر ===== -->
+<footer class="footer">
+    <div class="footer-top">
+        <div class="container">
+            <div class="footer-grid">
+                
+                <!-- درباره -->
+                <div class="footer-col">
+                    <img src="{% static 'images/logo.png' %}" alt="دیبا" class="footer-logo">
+                    <p>مزون دیبا، ارائه‌دهنده‌ی پوشاک لوکس زنانه با بهترین کیفیت و طراحی منحصربه‌فرد.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <!-- لینک‌های مفید -->
+                <div class="footer-col">
+                    <h3>دسترسی سریع</h3>
+                    <ul>
+                        <li><a href="{% url 'home' %}">خانه</a></li>
+                        <li><a href="{% url 'product_list' %}">محصولات</a></li>
+                        <li><a href="{% url 'about' %}">درباره ما</a></li>
+                        <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                        <li><a href="{% url 'ai_view' %}">اتاق پرو هوشمند</a></li>
+                    </ul>
+                </div>
+                
+                <!-- خدمات مشتریان -->
+                <div class="footer-col">
+                    <h3>خدمات مشتریان</h3>
+                    <ul>
+                        <li><a href="#">شرایط و قوانین</a></li>
+                        <li><a href="#">حریم خصوصی</a></li>
+                        <li><a href="#">سوالات متداول</a></li>
+                        <li><a href="{% url 'my_orders' %}">پیگیری سفارش</a></li>
+                    </ul>
+                </div>
+                
+                <!-- تماس -->
+                <div class="footer-col">
+                    <h3>تماس با ما</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> تبریز، خیابان ولیعصر</p>
+                    <p><i class="fas fa-phone"></i> ۰۹۱۲۳۴۵۶۷۸۹</p>
+                    <p><i class="fas fa-envelope"></i> info@diba.com</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <div class="container">
+            <p>© ۱۴۰۵ - مزون دیبا | تمامی حقوق محفوظ است</p>
+        </div>
+    </div>
+</footer>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}جستجو: {{ query }} | مزون دیبا{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>نتایج جستجو</h1>
+        {% if query %}
+            <p>جستجو برای: <strong>«{{ query }}»</strong></p>
+            <p>{{ result_count }} محصول پیدا شد</p>
+        {% else %}
+            <p>لطفاً چیزی برای جستجو وارد کنید.</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="products-section">
+    <div class="container">
+        
+        {% if query %}
+            {% if products %}
+            <div class="products-grid">
+                {% for product in products %}
+                <div class="product-card">
+                    <a href="{% url 'product_detail' product.slug %}" class="product-image">
+                        <img src="{{ product.main_image.url }}" alt="{{ product.name }}">
+                        {% if product.discount_price %}
+                        <span class="discount-badge">تخفیف</span>
+                        {% endif %}
+                    </a>
+                    <div class="product-info">
+                        <h3>
+                            <a href="{% url 'product_detail' product.slug %}">{{ product.name }}</a>
+                        </h3>
+                        <div class="product-price">
+                            {% if product.discount_price %}
+                            <span class="old-price">{{ product.price }} تومان</span>
+                            <span class="new-price">{{ product.discount_price }} تومان</span>
+                            {% else %}
+                            <span class="new-price">{{ product.price }} تومان</span>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'add_to_cart' product.id %}" class="btn-add-cart">
+                            <i class="fas fa-shopping-bag"></i> افزودن به سبد
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-search">
+                <i class="fas fa-search"></i>
+                <h2>محصولی یافت نشد</h2>
+                <p>متأسفانه محصولی با این مشخصات پیدا نکردیم.</p>
+                <a href="{% url 'product_list' %}" class="btn btn-gold">مشاهده همه‌ی محصولات</a>
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-search">
+                <i class="fas fa-search"></i>
+                <h2>جستجو کنید</h2>
+                <p>از نوار بالای صفحه، نام محصول مورد نظر رو جستجو کنید.</p>
+            </div>
+        {% endif %}
+        
+    </div>
+</section>
+
+{% endblock %}

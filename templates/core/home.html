@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}مزون دیبا | پوشاک لوکس زنانه{% endblock %}
+
+{% block content %}
+
+<!-- ===== اسلایدر ===== -->
+<section class="slider">
+    <div class="slider-container">
+        {% for banner in banners %}
+        <div class="slide {% if forloop.first %}active{% endif %}">
+            <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+            <div class="slide-content">
+                <h2>{{ banner.title }}</h2>
+                {% if banner.link %}
+                <a href="{{ banner.link }}" class="btn btn-gold">مشاهده</a>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="slide active">
+            <div class="slide-placeholder">
+                <h2>New Collection</h2>
+                <p>کلکسیون جدید دیبا</p>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <button class="slider-prev"><i class="fas fa-chevron-right"></i></button>
+        <button class="slider-next"><i class="fas fa-chevron-left"></i></button>
+    </div>
+</section>
+
+<!-- ===== دسته‌بندی‌ها ===== -->
+<section class="categories-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>دسته‌بندی محصولات</h2>
+            <span></span>
+        </div>
+        
+        <div class="categories-grid">
+            {% for category in categories %}
+            <a href="{% url 'category_products' category.slug %}" class="category-card">
+                {% if category.image %}
+                <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                {% endif %}
+                <div class="category-overlay">
+                    <h3>{{ category.name }}</h3>
+                </div>
+            </a>
+            {% empty %}
+            <div class="category-card">
+                <div class="category-overlay">
+                    <h3>پیراهن مجلسی</h3>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-overlay">
+                    <h3>شلوار و دامن</h3>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-overlay">
+                    <h3>پالتو</h3>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-overlay">
+                    <h3>اکسسوری</h3>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===== New Collection ===== -->
+<section class="new-collection">
+    <div class="container">
+        <div class="section-title">
+            <h2>New Collection</h2>
+            <p>کلکسیون جدید</p>
+            <span></span>
+        </div>
+        
+        <div class="products-grid">
+            {% for product in featured_products %}
+            <div class="product-card">
+                <a href="{% url 'product_detail' product.slug %}" class="product-image">
+                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}">
+                    {% if product.discount_price %}
+                    <span class="discount-badge">تخفیف</span>
+                    {% endif %}
+                </a>
+                <div class="product-info">
+                    <h3><a href="{% url 'product_detail' product.slug %}">{{ product.name }}</a></h3>
+                    <div class="product-price">
+                        {% if product.discount_price %}
+                        <span class="old-price">{{ product.price }} تومان</span>
+                        <span class="new-price">{{ product.discount_price }} تومان</span>
+                        {% else %}
+                        <span class="new-price">{{ product.price }} تومان</span>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'add_to_cart' product.id %}" class="btn-add-cart">
+                        <i class="fas fa-shopping-bag"></i> افزودن به سبد
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="empty-message">به‌زودی محصولات جدید اضافه می‌شوند.</p>
+            {% endfor %}
+        </div>
+        
+        <div class="view-all">
+            <a href="{% url 'product_list' %}" class="btn btn-outline-gold">مشاهده همه</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== خدمات ===== -->
+<section class="services">
+    <div class="container">
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-truck"></i>
+                <h3>ارسال سریع</h3>
+                <p>ارسال سریع و دقیق سفارشات</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>تضمین کیفیت</h3>
+                <p>محصولات با کیفیت بالا</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-headset"></i>
+                <h3>خدمات پس از فروش</h3>
+                <p>پشتیبانی سریع</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-undo"></i>
+                <h3>بازگشت کالا</h3>
+                <p>۷ روز ضمانت بازگشت</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

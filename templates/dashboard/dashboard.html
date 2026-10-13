@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}داشبورد مدیریت | مزون دیبا{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-section">
+    <div class="container">
+        
+        <div class="dashboard-header">
+            <h1>داشبورد مدیریت</h1>
+            <p>خوش آمدی، {{ user.username }} عزیز</p>
+        </div>
+        
+        <!-- ===== کارت‌های آمار ===== -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-shopping-bag"></i>
+                <div>
+                    <h3>{{ total_orders }}</h3>
+                    <p>کل سفارش‌ها</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-coins"></i>
+                <div>
+                    <h3>{{ total_revenue }}</h3>
+                    <p>درآمد کل (تومان)</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-box"></i>
+                <div>
+                    <h3>{{ total_products }}</h3>
+                    <p>محصولات</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div>
+                    <h3>{{ total_users }}</h3>
+                    <p>کاربران</p>
+                </div>
+            </div>
+            
+            <div class="stat-card warning">
+                <i class="fas fa-clock"></i>
+                <div>
+                    <h3>{{ pending_orders }}</h3>
+                    <p>در انتظار پرداخت</p>
+                </div>
+            </div>
+            
+            <div class="stat-card info">
+                <i class="fas fa-calendar-day"></i>
+                <div>
+                    <h3>{{ today_orders }}</h3>
+                    <p>سفارش‌های امروز</p>
+                </div>
+            </div>
+            
+            <div class="stat-card danger">
+                <i class="fas fa-envelope"></i>
+                <div>
+                    <h3>{{ unread_messages }}</h3>
+                    <p>پیام‌های خوانده‌نشده</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-tags"></i>
+                <div>
+                    <h3>{{ total_categories }}</h3>
+                    <p>دسته‌بندی‌ها</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ===== نمودار فروش ۷ روز اخیر ===== -->
+        <div class="dashboard-row">
+            <div class="dashboard-card">
+                <h2>فروش ۷ روز اخیر</h2>
+                <div class="chart">
+                    {% for day in last_7_days %}
+                    <div class="chart-bar">
+                        <div class="bar" style="height: {{ day.count }}0px;"></div>
+                        <span>{{ day.date }}</span>
+                        <small>{{ day.count }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- ===== دو ستون: سفارش‌های اخیر + پرفروش‌ها ===== -->
+        <div class="dashboard-row-two">
+            
+            <!-- سفارش‌های اخیر -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2>سفارش‌های اخیر</h2>
+                    <a href="/admin/orders/order/" class="btn-small">مشاهده همه</a>
+                </div>
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>شماره</th>
+                            <th>مشتری</th>
+                            <th>مبلغ</th>
+                            <th>وضعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in recent_orders %}
+                        <tr>
+                            <td>{{ order.order_number }}</td>
+                            <td>{{ order.full_name }}</td>
+                            <td>{{ order.total_price }} تومان</td>
+                            <td>
+                                <span class="order-status status-{{ order.status }}">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--text-secondary);">
+                                سفارشی وجود ندارد.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- پرفروش‌ترین محصولات -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2>پرفروش‌ترین محصولات</h2>
+                </div>
+                <ul class="top-products-list">
+                    {% for item in top_products %}
+                    <li>
+                        <span class="product-rank">#{{ forloop.counter }}</span>
+                        <span class="product-name">{{ item.product__name }}</span>
+                        <span class="product-sold">{{ item.total_sold }} فروش</span>
+                    </li>
+                    {% empty %}
+                    <li style="color: var(--text-secondary);">محصولی فروخته نشده.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+        </div>
+        
+        <!-- ===== دسترسی سریع ===== -->
+        <div class="dashboard-row">
+            <div class="dashboard-card">
+                <h2>دسترسی سریع</h2>
+                <div class="quick-links">
+                    <a href="/admin/" class="quick-link">
+                        <i class="fas fa-cog"></i>
+                        پنل ادمین جنگو
+                    </a>
+                    <a href="/admin/products/product/add/" class="quick-link">
+                        <i class="fas fa-plus"></i>
+                        محصول جدید
+                    </a>
+                    <a href="/admin/products/category/add/" class="quick-link">
+                        <i class="fas fa-tag"></i>
+                        دسته‌بندی جدید
+                    </a>
+                    <a href="/admin/orders/order/" class="quick-link">
+                        <i class="fas fa-shopping-bag"></i>
+                        مدیریت سفارش‌ها
+                    </a>
+                    <a href="/admin/contact/contactmessage/" class="quick-link">
+                        <i class="fas fa-envelope"></i>
+                        پیام‌های تماس
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+{% endblock %}

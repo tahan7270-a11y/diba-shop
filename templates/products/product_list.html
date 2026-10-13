@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}محصولات | مزون دیبا{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>محصولات</h1>
+        <p>مجموعه‌ای از بهترین لباس‌های زنانه</p>
+    </div>
+</section>
+
+<section class="products-section">
+    <div class="container">
+        <div class="products-layout">
+            
+            <!-- ===== سایدبار فیلتر ===== -->
+            <aside class="sidebar">
+                <form method="GET" id="filterForm">
+                    
+                    <!-- دسته‌بندی -->
+                    <div class="filter-box">
+                        <h3>دسته‌بندی</h3>
+                        <ul>
+                            <li>
+                                <label>
+                                    <input type="radio" name="category" value="" 
+                                           {% if not selected_category %}checked{% endif %}>
+                                    همه
+                                </label>
+                            </li>
+                            {% for category in categories %}
+                            <li>
+                                <label>
+                                    <input type="radio" name="category" 
+                                           value="{{ category.slug }}"
+                                           {% if selected_category == category.slug %}checked{% endif %}>
+                                    {{ category.name }}
+                                </label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <!-- محدوده قیمت -->
+                    <div class="filter-box">
+                        <h3>محدوده قیمت</h3>
+                        <div class="price-range">
+                            <input type="number" name="min_price" placeholder="از (تومان)" 
+                                   value="{{ min_price|default:'' }}">
+                            <input type="number" name="max_price" placeholder="تا (تومان)" 
+                                   value="{{ max_price|default:'' }}">
+                        </div>
+                    </div>
+                    
+                    <!-- مرتب‌سازی -->
+                    <div class="filter-box">
+                        <h3>مرتب‌سازی</h3>
+                        <select name="sort">
+                            <option value="newest" {% if sort == 'newest' %}selected{% endif %}>جدیدترین</option>
+                            <option value="oldest" {% if sort == 'oldest' %}selected{% endif %}>قدیمی‌ترین</option>
+                            <option value="cheapest" {% if sort == 'cheapest' %}selected{% endif %}>ارزان‌ترین</option>
+                            <option value="most_expensive" {% if sort == 'most_expensive' %}selected{% endif %}>گران‌ترین</option>
+                            <option value="name" {% if sort == 'name' %}selected{% endif %}>بر اساس نام</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-gold" style="width: 100%;">
+                        <i class="fas fa-filter"></i> اعمال فیلتر
+                    </button>
+                    
+                    <a href="{% url 'product_list' %}" class="btn btn-outline-gold" 
+                       style="width: 100%; margin-top: 10px; display: block;">
+                        <i class="fas fa-times"></i> حذف فیلترها
+                    </a>
+                    
+                </form>
+            </aside>
+            
+            <!-- ===== لیست محصولات ===== -->
+            <div class="products-main">
+                <div class="products-toolbar">
+                    <span>{{ products.count }} محصول</span>
+                </div>
+                
+                <div class="products-grid">
+                    {% for product in products %}
+                    <div class="product-card">
+                        <a href="{% url 'product_detail' product.slug %}" class="product-image">
+                            <img src="{{ product.main_image.url }}" alt="{{ product.name }}">
+                            {% if product.discount_price %}
+                            <span class="discount-badge">تخفیف</span>
+                            {% endif %}
+                        </a>
+                        <div class="product-info">
+                            <h3>
+                                <a href="{% url 'product_detail' product.slug %}">{{ product.name }}</a>
+                            </h3>
+                            <div class="product-price">
+                                {% if product.discount_price %}
+                                <span class="old-price">{{ product.price }} تومان</span>
+                                <span class="new-price">{{ product.discount_price }} تومان</span>
+                                {% else %}
+                                <span class="new-price">{{ product.price }} تومان</span>
+                                {% endif %}
+                            </div>
+                            <a href="{% url 'add_to_cart' product.id %}" class="btn-add-cart">
+                                <i class="fas fa-shopping-bag"></i> افزودن به سبد
+                            </a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="empty-message">محصولی با این مشخصات پیدا نشد.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+{% endblock %}
